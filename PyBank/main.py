@@ -8,24 +8,28 @@ output_path = os.path.join("analysis","financial_analysis.txt")
 with open(filepath, 'r', encoding = 'UTF-8') as csvfile:
     csvreader = csv.reader(csvfile, delimiter = ",")
     #read the header row first
-    csv_header = next(csvfile)
-    
+    csv_header = next(csvreader)
+    first_line = next(csvreader)
    #loop through the rows after the header row
 
     #initialize the total number of months
-    monthtotal = 0
+    monthtotal = 1
    #define a new list to hold the values from the profits/losses column which is index 1
    #the date column is index 0
    
     totalamount = []
+    greatest_inc_change = [0, ""]
+    greatest_dec_change = [99999999, ""]
     amount = 0
+    amount += int(first_line[1])
    
     #define a list to hold the change of the profits and losses
     change_list = []
-    previouschange = 0
+    #previouschange = 0
     average_change = 0
-    monthchange = 0
-    monthchange_list = []
+    #monthchange = 0
+    #monthchange_list = []
+    previouschange = int(first_line[1])
 
     for row in csvreader:
         monthtotal = monthtotal + 1
@@ -35,7 +39,13 @@ with open(filepath, 'r', encoding = 'UTF-8') as csvfile:
         change = int(row[1]) - int(previouschange)
         previouschange = int(row[1])
         change_list.append(change)
-        
+        if change > greatest_inc_change[0]:
+            greatest_inc_change[0] = change
+            greatest_inc_change[1] = row[0]
+        if change < greatest_dec_change[0]:
+            greatest_dec_change[0] = change
+            greatest_dec_change[1] = row[0]
+    average_change = sum(change_list)/ len(change_list)
         
         
 
@@ -47,11 +57,11 @@ with open(filepath, 'r', encoding = 'UTF-8') as csvfile:
     #prints the net amount of profits/losses to the terminal
     print(f"Total: $ {amount}")
     #prints the average change to the terminal
-    print(f"Average Change: $  ")
+    print(f"Average Change: $ {average_change:.2f} ")
     #prints gratest increase to the terminal 
-    print(f"Greatest Increase in Profits:  ") 
+    print(f"Greatest Increase in Profits: {greatest_inc_change[1]} : $ {greatest_inc_change[0]}  ") 
     #prints greatest decrease to the terminal
-    print(f"Greatest Decrease in Profits:  ")
+    print(f"Greatest Decrease in Profits: {greatest_dec_change[1]} : $ {greatest_dec_change[0]}  ")
 
     
 
@@ -73,19 +83,19 @@ with open(filepath, 'r', encoding = 'UTF-8') as csvfile:
 
         txtfile.write(total_amount)
 
-        average_change = (
-            f"Average Change: $  \n")
+        average_change_str = (
+            f"Average Change: $ {average_change:.2f}  \n")
         
-        txtfile.write(average_change)
+        txtfile.write(average_change_str)
 
 
         greatest_increase = (
-            f"Greatest Increase in Profits: \n")
+            f"Greatest Increase in Profits:  {greatest_inc_change[1]} : $ {greatest_inc_change[0]} \n")
 
         txtfile.write(greatest_increase)
     
         greatest_decrease = (
-            f"Greatest Decrease in Profits: \n")
+            f"Greatest Decrease in Profits: {greatest_dec_change[1]} : $ {greatest_dec_change[0]}  \n")
 
         txtfile.write(greatest_decrease)
    

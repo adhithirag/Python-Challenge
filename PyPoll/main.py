@@ -24,7 +24,8 @@ with open(filepath, 'r', encoding = 'UTF-8') as csvfile:
     candidate_array = np.unique(candidate_list, return_counts= True)
     #this converts the input which is candidate_array int to an array
     new_array = np.asarray((candidate_array)).T
-
+    #print(new_array)
+    #print(candidate_array)
     #name of the first candidate
     candidate1 = (candidate_array[0][0])
     #name of the second candidate
@@ -47,7 +48,19 @@ with open(filepath, 'r', encoding = 'UTF-8') as csvfile:
 
     #define the maximum variable that will hold the max number of votes won by a candidate
     maximum = np.max(candidate_array[1])
-
+    name = ""
+    for x in range(len(new_array)):
+        if (int(new_array[x][1])) == np.max(candidate_array[1]):
+            name = new_array[x][0]
+    
+    
+    # print(name)
+        # else:
+        #     print("Not it")
+        # if (new_array[x][1]) == np.max(candidate_array[1]):
+        #     print(new_array[x][1])
+        #     print("here we are")
+    #if new_array[]
     #define winner variable as the candidate who received the max number of votes
     
     #write the results to a text file 
@@ -77,7 +90,7 @@ with open(filepath, 'r', encoding = 'UTF-8') as csvfile:
         txtfile.write(candidate_names)
         
         winner = (
-            f"Winner: \n"
+            f"Winner: {name}\n"
 
             f"The winner received {maximum} votes.\n"
 
@@ -99,4 +112,4 @@ with open(filepath, 'r', encoding = 'UTF-8') as csvfile:
     print(f"The winner received {maximum} votes.")
    
     #print the name of the winner who received the max number of votes 
-    print(f"Winner: ") 
+    print(f"Winner: {name}") 
